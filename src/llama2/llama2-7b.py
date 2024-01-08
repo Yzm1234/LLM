@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
     # Model and tokenizer names
     base_model_name = args.model_name
-    refined_model = "llama-2-7b-kbase-pangenome-epochs" #You can give it your own name
+    refined_model = args.refined_model_name #You can give it your own name
 
     # Tokenizer
     llama_tokenizer = AutoTokenizer.from_pretrained(base_model_name, trust_remote_code=True)
