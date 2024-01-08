@@ -30,7 +30,7 @@ args = parser.parse_args()
 if __name__ == "__main__":
     print("Loading model.....")
     # Model and tokenizer names
-    base_model_name = args.model_name
+    base_model_name = args.base_model_name
     refined_model = args.refined_model_name #You can give it your own name
 
     # Tokenizer
