@@ -28,7 +28,7 @@ args = parser.parse_args()
 
 
 if __name__ == "__main__":
-
+    print("Loading model.....")
     # Model and tokenizer names
     base_model_name = args.model_name
     refined_model = args.refined_model_name #You can give it your own name
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     )
     base_model.config.use_cache = False
     base_model.config.pretraining_tp = 1
-
+    print("model loading is done.")
     # TODO: update lora config based on model
     # LoRA Config
     peft_parameters = LoraConfig(
@@ -92,7 +92,9 @@ if __name__ == "__main__":
     )
 
     # Load dataset
+    print("Loading dataset")
     ds = load_from_disk(args.dataset_path)
+    print("Dataset is loaded.")
 
     # Trainer
     trainer = SFTTrainer(
@@ -106,10 +108,14 @@ if __name__ == "__main__":
     )
 
     # Training
+    print("Start training...")
     trainer.train()
 
     # save model
+    print("Saving fine-tuned model...")
     trainer.save_model(os.path.join(args.output_folder, refined_model))
+    print("Fine-tuned model is saved.")
 
     # plot loss graph
     get_tuning_loss_plot(trainer.state.log_history, f"{args.output_folder}/{refined_model}")
+    print("Training loss is saved.")
