@@ -21,7 +21,7 @@ parser.add_argument("base_model_name", help="the name of the base model before f
 parser.add_argument("refined_model_name", help="the name of the model after fine-tuning")
 parser.add_argument("dataset_path", help="the name of the dateset")
 parser.add_argument("output_folder", help="output folder path")
-parser.add_argument("epoch", help="number of epoch")
+parser.add_argument("epoch", type=int, help="number of epoch")
 
 global args
 args = parser.parse_args()
