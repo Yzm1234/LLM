@@ -1,7 +1,13 @@
 import matplotlib.pyplot as plt
-from datasets import load_dataset
 from datasets import load_dataset,Features,Value
-from datasets import load_from_disk
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    StoppingCriteria,
+    StoppingCriteriaList,
+    pipeline,
+)
+from langchain.llms import HuggingFacePipeline
 
 
 def split_dataset(data_path: str, output_file: str, test_size: float=0.2, random_seed: int=42):
@@ -40,3 +46,31 @@ def get_tuning_loss_plot(log_hist, graph_name):
     plt.ylabel("loss")
     plt.savefig(f"{graph_name}_tuning_loss.png")
     plt.show()
+
+
+def model_inference(model_name, max_new_tokens=500):
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name, device_map="auto"
+    )
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = model.eval()
+    # model genration config
+    generation_config = model.generation_config
+    generation_config.temperature = 1
+    generation_config.num_return_sequences = 1
+    generation_config.max_new_tokens = max_new_tokens
+    generation_config.use_cache = False
+    generation_config.repetition_penalty = 1
+    generation_config.pad_token_id = tokenizer.eos_token_id
+    generation_config.eos_token_id = tokenizer.eos_token_id
+
+    generation_pipeline = pipeline(
+        model=model,
+        tokenizer=tokenizer,
+        return_full_text=True,
+        task="text-generation",
+        generation_config=generation_config,
+    )
+
+    llm = HuggingFacePipeline(pipeline=generation_pipeline)
+    return llm
