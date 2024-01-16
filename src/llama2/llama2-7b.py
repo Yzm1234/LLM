@@ -63,7 +63,7 @@ if __name__ == "__main__":
         r=8,
         bias="none",
         task_type="CAUSAL_LM",
-        target_modules=["q_proj", "v_proj", "up_proj", "down_proj", "o_proj"]
+        target_modules=["q_proj", "v_proj", "up_proj", "down_proj"]
     )
 
     Path(args.output_folder).mkdir(parents=True, exist_ok=True)
